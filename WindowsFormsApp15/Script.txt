@@ -1,0 +1,177 @@
+﻿USE db_a4e776_ecostor;
+
+-- -----------------------------------------------------
+-- Table `tb_funcionario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_a4e776_ecostor`.`tb_funcionario` (
+  `id_funcionario` INT NOT NULL AUTO_INCREMENT,
+  `nm_funcionario` VARCHAR(70) NOT NULL,
+  `dt_nascimento` DATE NOT NULL,
+  `ds_genero` ENUM('M', 'F') NOT NULL,
+  `vl_transporte` DECIMAL(10,2) NOT NULL,
+  `vl_refeicao` DECIMAL(10,2) NOT NULL,
+  `vl_alimentacao` DECIMAL(10,2) NOT NULL,
+  `vl_convenio` DECIMAL(10,2) NOT NULL,
+  `ds_cep` VARCHAR(20) NOT NULL,
+  `ds_cidade` VARCHAR(50) NOT NULL,
+  `ds_UF` VARCHAR(15) NOT NULL,
+  `ds_complemento` VARCHAR(50) NULL,
+  `ds_numeroCasa` VARCHAR(20) NOT NULL,
+  `ds_cpf` VARCHAR(20) NOT NULL,
+  `ds_rg` VARCHAR(15) NOT NULL,
+  `img_foto` LONGBLOB NOT NULL,
+  `ds_email` VARCHAR(50) NOT NULL,
+  `ds_cargo` VARCHAR(45) NOT NULL,
+  `vl_salario` DECIMAL NOT NULL,
+  `ds_endereco` VARCHAR(50) NOT NULL,
+  `ds_telefone` VARCHAR(15) NOT NULL,
+  `ds_celular` VARCHAR(20),
+  `tm_horasTrabalhadas` TIME NOT NULL,
+  `dt_contratacao` DATE NOT NULL,  
+  PRIMARY KEY (`id_funcionario`),
+  UNIQUE KEY (`ds_cpf`, `ds_rg`, `ds_email`)
+  );
+DESC tb_funcionario;
+
+-- -----------------------------------------------------
+-- Table `tb_usuario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_a4e776_ecostor`.`tb_usuario` (
+  `id_usuario` INT NOT NULL AUTO_INCREMENT,
+  `id_funcionario` INT NOT NULL,
+  `nm_usuario` VARCHAR(65) NOT NULL,
+  `ds_senha` VARCHAR(16) NOT NULL,
+  PRIMARY KEY (`id_usuario`),
+  FOREIGN KEY(`id_funcionario`) REFERENCES tb_funcionario (`id_funcionario`)
+  );
+desc tb_usuario;
+
+-- -----------------------------------------------------
+-- Table `tb_fornecedor`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_a4e776_ecostor`.`tb_fornecedor` (
+  `id_fornecedor` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  `nm_fornecedor` VARCHAR(45) NOT NULL,
+  `nm_empresa` VARCHAR(45) NOT NULL,
+  `ds_telefone` VARCHAR(15) NOT NULL,
+  `ds_celular` VARCHAR(15) NULL,
+  `ds_endereco` VARCHAR(80) NOT NULL,
+  `ds_cnpj` VARCHAR(17) NOT NULL
+  );
+desc tb_fornecedor;
+
+-- -----------------------------------------------------
+-- Table `tb_produto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_a4e776_ecostor`.`tb_produto` (
+  `id_produto` INT NOT NULL AUTO_INCREMENT,
+  `nm_produto` VARCHAR(45) NOT NULL,
+  `ds_categoria` VARCHAR(45) NULL,
+  `vl_valor` DECIMAL NOT NULL,
+  `id_fornecedor` INT NOT NULL,
+  PRIMARY KEY (`id_produto`));
+desc tb_produto;
+
+-- -----------------------------------------------------
+-- Table `tb_estoque`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_a4e776_ecostor`.`tb_estoque` (
+  `id_estoque` INT NOT NULL,
+  `id_fornecedor` INT NOT NULL,
+  `id_produto` INT NOT NULL,
+  `dt_entrada` DATETIME NOT NULL,
+  `dt_validade` DATE NULL,
+  `vl_valor` DECIMAL NOT NULL,
+  `qtd_produto` INT NOT NULL,
+  PRIMARY KEY (`id_estoque`),
+    FOREIGN KEY (`id_produto`)
+    REFERENCES `tb_produto` (`id_produto`)
+    ON DELETE CASCADE,
+	FOREIGN KEY (`id_fornecedor`)
+    REFERENCES `tb_fornecedor` (`id_fornecedor`)
+    ON DELETE CASCADE);
+desc tb_estoque;
+
+-- -----------------------------------------------------
+-- Table `tb_venda`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_a4e776_ecostor`.`tb_venda` (
+  `id_venda` INT NOT NULL AUTO_INCREMENT,
+  `id_usuario` INT NULL,
+  `dt_saida` DATETIME NULL,
+  PRIMARY KEY (`id_venda`),
+    FOREIGN KEY (`id_usuario`)
+    REFERENCES `tb_usuario` (`id_usuario`)
+    ON DELETE CASCADE);
+desc tb_venda;
+
+-- -----------------------------------------------------
+-- Table `tb_venda_item`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_a4e776_ecostor`.`tb_venda_item` (
+  `id_venda_item` INT NOT NULL AUTO_INCREMENT,
+  `id_venda` INT NULL,
+  `id_produto` INT NULL,
+  `vl_valorTotal` DECIMAL NULL,
+  PRIMARY KEY (`id_venda_item`),
+    FOREIGN KEY (`id_produto`)
+    REFERENCES `tb_produto` (`id_produto`)
+    ON DELETE CASCADE,
+    FOREIGN KEY (`id_venda`)
+    REFERENCES `tb_venda` (`id_venda`)
+    ON DELETE CASCADE);
+desc tb_venda_item;
+
+-- -----------------------------------------------------
+-- Table `tb_controleDePonto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_a4e776_ecostor`.`tb_controleDePonto` (
+  `id_controleDePonto` INT NOT NULL AUTO_INCREMENT,
+  `id_funcionario` INT NOT NULL,
+  `id_usuario` INT NOT NULL,
+  `dt_mes` DATE NOT NULL,
+  `dt_entrada` DATETIME NULL,
+  `dt_saida` DATETIME NULL,
+  PRIMARY KEY (`id_controleDePonto`),
+    FOREIGN KEY (`id_funcionario`)
+    REFERENCES `tb_funcionario` (`id_funcionario`)
+    ON DELETE CASCADE,
+    FOREIGN KEY (`id_usuario`)
+    REFERENCES `tb_usuario` (`id_usuario`)
+    ON DELETE CASCADE);
+DESC tb_controleDePonto;
+
+-- -----------------------------------------------------
+-- Table `tb_folhaPagamento`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_a4e776_ecostor`.`tb_folhaPagamento` (
+  `id_folhaPagamento` INT NOT NULL AUTO_INCREMENT,
+  `id_funcionario` INT NULL,
+  `dt_mes` DATE NULL,
+  `vl_salario` DECIMAL NULL,
+  `vl_desconto` DECIMAL NULL,
+  `vl_contribuicao` DECIMAL NULL,
+  `vl_total` DECIMAL NULL,
+  `id_controleDePonto` INT NULL,
+  PRIMARY KEY (`id_folhaPagamento`),
+    FOREIGN KEY (`id_funcionario`)
+    REFERENCES `tb_funcionario` (`id_funcionario`)
+    ON DELETE CASCADE,
+    FOREIGN KEY (`id_controleDePonto`)
+    REFERENCES `tb_controleDePonto` (`id_controleDePonto`)
+    ON DELETE CASCADE);
+desc tb_folhaPagamento;
+
+-- -----------------------------------------------------
+-- Table `tb_log`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_a4e776_ecostor`.`tb_log` (
+  `id_log` INT NOT NULL AUTO_INCREMENT,
+  `id_usuario` INT NULL,
+  `dt_dataLogin` DATETIME NULL,
+  `dt_dataLogoff` DATETIME NULL,
+  PRIMARY KEY (`id_log`),
+    FOREIGN KEY (`id_usuario`)
+    REFERENCES `tb_usuario` (`id_usuario`)
+    ON DELETE CASCADE);
+DESC TB_LOG;

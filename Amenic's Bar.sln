@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcoStore", "WindowsFormsApp15\EcoStore.csproj", "{578F264F-4BB8-4653-889E-35FBD1F2C6BB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{578F264F-4BB8-4653-889E-35FBD1F2C6BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{578F264F-4BB8-4653-889E-35FBD1F2C6BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{578F264F-4BB8-4653-889E-35FBD1F2C6BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{578F264F-4BB8-4653-889E-35FBD1F2C6BB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A1C2B60F-FF64-4CBF-B3AB-6DC176683BA8}
+	EndGlobalSection
+EndGlobal
